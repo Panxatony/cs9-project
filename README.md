@@ -3,31 +3,42 @@ panxatony.cs9project
 
 This role is used to implement CloudSystem infrastructure for new customer projects including:
 
-* 
+* Creation of Project Group in FreeIPA
+* Creation of Project member accounts in FreeIPA
+* Creation of OpenStack Project in CloudSystem 9 Foundation
+* Add FreeIPA Project member accounts to OpenStack Project
+* Upload glance image
+* Creation of OpenStack Project Tenant Network and Router
+* Creation of OpenStack Project Security Group
+* Creation of OpenStack 
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+CS9 Lab environment must be installed using panxatony.cs9lab Ansible playbook.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+t.b.d.
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Following infrastructure must be implemented
+
+* CloudSystem 9 must be installed
+* CS9 Lab VMs must be deployed
+* CloudSystem 9 must use FreeIPA as Directory Server
 
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
+    - hosts: cs9project
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: panxatony.cs9project, project_name: dummy }
 
 License
 -------
@@ -37,4 +48,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Lars Hunold
