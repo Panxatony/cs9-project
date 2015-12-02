@@ -1,0 +1,32 @@
+---
+# tasks file for panxatony.cs9project
+
+# create freeipa project group
+- name: create freeipa project group {{ project_freeipa_user_group }}
+  command: ipa hostgroup-add {{ project_freeipa_user_group }} --desc "Group used for Project {{ project_name }}"
+  delegate_to: "{{ freeipa_hostname }}"
+  tags:
+    - project-freeipa
+
+# create freeipa group
+- name: create freeipa project users 
+  command: ipa user-add {{ item.username }} --first {{ item.first }} --last {{ item.last }} --email {{ itm.email }}
+  with_items: {{ project_freeipa_users }}
+  delegate_to: "{{ freeipa_hostname }}"
+  tags:
+    - project-freeipa
+
+# add freeipa user to freeipa group
+- name: create freeipa project users 
+  command: group-add-member {{ project_freeipa_user_group }} --users={{ item.username }}
+  with_items: {{ project_freeipa_users }}
+  delegate_to: "{{ freeipa_hostname }}"
+  tags:
+    - project-freeipa
+
+# create freeipa hostgroup
+- name: create freeipa project hostgroup {{ project_freeipa_hostgroup }}
+  command: ipa hostgroup-add {{ project_freeipa_hostgroup }}
+  delegate_to: "{{ freeipa_hostname }}"
+  tags:
+    - project-freeipa

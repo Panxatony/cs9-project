@@ -1,0 +1,103 @@
+---
+
+# Create a project
+- os_project:
+    auth:
+      auth_url: {{ cs9_os_auth_url }}
+      username: {{ cs9_os_auth_user }}
+      password: {{ cs9_os_auth_password }}
+      project_name: demo
+    cloud: {{ cs9_os_cloud }}
+    state: present
+    name: {{ project_name }}
+    description: CS9 Project
+    domain_id: {{ project_os_domainid }}
+    enabled: True
+    tags:
+      - project-openstack
+
+# Create an externally accessible network named 'ext_network'.
+- os_network:
+    auth:
+      auth_url: {{ cs9_os_auth_url }}
+      username: {{ cs9_os_auth_user }}
+      password: {{ cs9_os_auth_password }}
+      project_name: {{ project_name }}
+    cloud: {{ cs9_os_cloud }}
+    shared: no
+    state: present
+    name: tenant-{{ project_name }}
+    external: FALSE
+    validate_certs: FALSE
+    wait:yes
+    tags:
+      - project-openstack
+
+ # Create a new (or update an existing) subnet on the specified network
+- os_subnet:
+    auth:
+      auth_url: {{ cs9_os_auth_url }}
+      username: {{ cs9_os_auth_user }}
+      password: {{ cs9_os_auth_password }}
+      project_name: {{ project_name }}
+    state: present
+    network_name: tenant-{{ project_name }}
+    name: tenant-{{ project_name }}-subnet
+    cidr: "{{ project_os_network_cidr }}"
+    dns_nameservers: {{ project_os_network_dnssrv }}
+    enable_dhcp: True
+    allocation_pool_start: "{{ project_os_network_alloc_start }}"
+    allocation_pool_end: "{{ project_os_network_alloc_end }}"
+    tags:
+      - project-openstack
+
+# Creates a router attached to ext_network1 on an IPv4 subnet and one
+# internal subnet interface.
+- os_router:
+    auth:
+      auth_url: {{ cs9_os_auth_url }}
+      username: {{ cs9_os_auth_user }}
+      password: {{ cs9_os_auth_password }}
+      project_name: {{ project_name }}
+    cloud: {{ cs9_os_cloud }}
+    state: present
+    name: router-{{ project_name }}
+    network: {{ cs9_os_external_network_subnet }}
+    external_fixed_ips:
+      - subnet: {{ cs9_os_external_network_subnet }}
+    interfaces:
+      - tenant-{{ project_name }}-subnet
+    tags:
+      - project-openstack
+
+# Create a security group
+- os_security_group:
+    auth:
+      auth_url: {{ cs9_os_auth_url }}
+      username: {{ cs9_os_auth_user }}
+      password: {{ cs9_os_auth_password }}
+      project_name: {{ project_name }}
+    cloud: {{ cs9_os_cloud }}
+    state: present
+    name: sec-{{ project_name }}
+    description: security group for {{ project_name }} servers
+    tags:
+      - project-openstack
+
+# Create a security group rule for ping
+- os_security_group_rule:
+    cloud: {{ cs9_os_cloud }}
+    security_group: sec-{{ project_name }}
+    protocol: icmp
+    remote_ip_prefix: 0.0.0.0/0
+
+# Creates a new key pair and the private key returned after the run.
+- os_keypair:
+    auth:
+      auth_url: {{ cs9_os_auth_url }}
+      username: {{ cs9_os_auth_user }}
+      password: {{ cs9_os_auth_password }}
+      project_name: {{ project_name }}
+    cloud: {{ cs9_os_cloud }}
+    state: present
+    name: {{ project_name }}_key

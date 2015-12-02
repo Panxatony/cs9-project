@@ -1,2 +1,8 @@
 ---
 # tasks file for panxatony.cs9project
+
+- include: freeipa.yml tags=project-freeipa
+  when: project_freeipa_execute == true
+
+- include: openstack.yml tags=project-openstack
+  when: project_os_execute == true

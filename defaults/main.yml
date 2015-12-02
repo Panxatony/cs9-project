@@ -1,2 +1,34 @@
 ---
 # defaults file for panxatony.cs9project
+
+# environment requirements
+
+freeipa_hostname: 192.168.60.5
+freeipa_admin: cs9admin
+
+cs9_os_adminclient_hostname: 192.168.60.6
+cs9_os_adminclient_install_cli: true
+cs9_os_admincli:
+cs9_os_cloud:
+cs9_os_external_network:
+cs9_os_external_network_subnet:
+cs9_os_auth_url: http://openstack.local:5000/v2.0
+cs9_os_auth_user:
+cs9_os_auth_pasword: 
+
+# project defaults:
+project_freeipa_execute: true
+project_os_execute: true
+project_name: myfirstproject
+project_os_domainid: myfirstid
+project_os_network_dnssrv:
+  - 8.8.8.7
+  - 8.8.8.8
+project_os_network_cidr: 192.168.0.0/24
+project_os_network_alloc_start: 192.168.0.10
+project_os_network_alloc_end: 192.168.0.100
+project_freeipa_user_group: myfirstprojectgroup
+project_freeipa_users:
+  - { username: user1, first: Boba, last: Fett, email: boba@cs9demo.lab }
+  - { username: user2, first: Luke, last: Skywalker, email: luke@cs9demo.lab}
+project_freeipa_hostgroup: myfirsthostgroup
